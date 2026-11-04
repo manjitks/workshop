@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "format": {
+      "type": "string",
+      "const": "open-workshop-project"
+    },
+    "formatVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "number",
+          "const": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "budgetInr": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 100000000
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "revision",
+        "name",
+        "objective",
+        "budgetInr"
+      ],
+      "additionalProperties": false
+    },
+    "parts": {
+      "maxItems": 200,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "spec": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "unitPriceInr": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000000
+          },
+          "selected": {
+            "type": "boolean"
+          },
+          "priceSource": {
+            "type": "string",
+            "enum": ["illustrative", "manual"]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "spec",
+          "quantity",
+          "unitPriceInr",
+          "selected"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "estimates": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "modelVersion": {
+            "type": "string",
+            "const": "ideal-runtime/1"
+          },
+          "projectRevision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "inputs": {
+            "type": "object",
+            "properties": {
+              "capacityAh": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "currentA": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "usableFraction": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": ["capacityAh", "currentA", "usableFraction"],
+            "additionalProperties": false
+          },
+          "seconds": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "evidence": {
+            "type": "string",
+            "const": "estimated"
+          }
+        },
+        "required": [
+          "modelVersion",
+          "projectRevision",
+          "inputs",
+          "seconds",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "briefReviewed": {
+      "type": "boolean"
+    },
+    "sampleProject": {
+      "type": "boolean"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  },
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "project",
+    "parts",
+    "estimates",
+    "briefReviewed",
+    "sampleProject",
+    "updatedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "urn:open-workshop:project:1",
+  "description": "Portable project format v1. Runtime validation additionally checks unique part IDs, result/input consistency, and revision ordering. No secrets or device permissions belong in this file."
+}

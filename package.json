@@ -1,0 +1,25 @@
+{
+  "name": "open-workshop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/web",
+    "packages/contracts"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @workshop/web",
+    "build": "npm run build -w @workshop/web",
+    "test": "npm run test -w @workshop/web",
+    "check": "npm run build && npm test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "schema": "node --experimental-strip-types scripts/export-schema.mjs && prettier --write schemas/project-v1.schema.json"
+  },
+  "devDependencies": {
+    "prettier": "3.9.10"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
